@@ -1,0 +1,14 @@
+<resources>
+	<string name="app_name">audio-sample-app</string>
+
+	<string name="navigation_drawer_open">Open navigation drawer</string>
+	<string name="navigation_drawer_close">Close navigation drawer</string>
+	<string name="nav_header_title">Audio</string>
+	<string name="nav_header_subtitle">646749741@qq.com</string>
+	<string name="nav_header_desc">Navigation header</string>
+
+	<string name="settings">settings</string>
+	<string name="delete">Delete</string>
+	<string name="recording">Recording: %s</string>
+
+</resources>

@@ -1,0 +1,64 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+	<!-- Base application theme. -->
+	<style name="Theme.Audiosampleapp" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+		<!-- Primary brand color. -->
+		<item name="colorPrimary">@color/purple_500</item>
+		<item name="colorPrimaryVariant">@color/purple_700</item>
+		<item name="colorOnPrimary">@color/white</item>
+		<!-- Secondary brand color. -->
+		<item name="colorSecondary">@color/teal_200</item>
+		<item name="colorSecondaryVariant">@color/teal_700</item>
+		<item name="colorOnSecondary">@color/black</item>
+		<!-- Status bar color. -->
+		<item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+		<!-- Customize your theme here. -->
+	</style>
+
+	<!-- Base Theme -->
+	<style name="BaseTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+		<!-- Attributes for all APIs -->
+		<item name="windowActionBar">false</item>
+		<item name="windowNoTitle">true</item>
+		<item name="dialogTheme">@style/AppTheme.Dialog</item>
+		<item name="alertDialogTheme">@style/AppTheme.Dialog.Alert</item>
+		<item name="colorControlHighlight">@color/selector_black_pressed</item>
+	</style>
+
+	<style name="BaseTheme.Blue">
+		<!-- Attributes for all APIs -->
+		<item name="colorPrimary">@color/material_blue_500</item>
+		<item name="colorPrimaryDark">@color/material_blue_700</item>
+		<item name="colorAccent">@color/material_blue_a700</item>
+		<item name="dialogTheme">@style/AppTheme.Dialog.Blue</item>
+		<item name="alertDialogTheme">@style/AppTheme.Dialog.Alert.Blue</item>
+	</style>
+
+	<style name="AppTheme.Dialog" parent="Theme.AppCompat.Light.Dialog">
+	</style>
+
+	<style name="AppTheme.Dialog.Blue">
+		<item name="colorPrimary">@color/material_blue_500</item>
+		<item name="colorPrimaryDark">@color/material_blue_700</item>
+		<item name="colorAccent">@color/material_blue_a700</item>
+	</style>
+
+	<!-- Default Alert Dialog Theme -->
+	<style name="AppTheme.Dialog.Alert" parent="Theme.AppCompat.Light.Dialog.Alert">
+	</style>
+
+	<!-- Blue Alert Dialog Theme -->
+	<style name="AppTheme.Dialog.Alert.Blue">
+		<item name="colorPrimary">@color/material_blue_500</item>
+		<item name="colorPrimaryDark">@color/material_blue_700</item>
+		<item name="colorAccent">@color/material_blue_a700</item>
+	</style>
+
+	<!-- Dark App Bar Theme -->
+	<style name="AppTheme.AppBar.Dark" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+	</style>
+
+	<!-- Light Overlay Theme -->
+	<style name="AppTheme.Overlay.Light" parent="ThemeOverlay.AppCompat.Light">
+	</style>
+
+</resources>

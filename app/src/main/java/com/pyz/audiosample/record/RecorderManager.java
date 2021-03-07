@@ -12,15 +12,15 @@ public class RecorderManager {
 	private RecorderInterface.Recorder audioRecorder;
 	private RecorderInterface.StateListener stateListener;
 
-	public static RecorderManager getInstance(){
+	public static RecorderManager getInstance() {
 		return RecorderManagerHolder.instance;
 	}
 
-	private static class RecorderManagerHolder{
+	private static class RecorderManagerHolder {
 		private final static RecorderManager instance = new RecorderManager();
 	}
 
-	private RecorderManager(){
+	private RecorderManager() {
 		prefs = PrefsImpl.getInstance(null);
 		stateListener = new RecorderInterface.StateListener() {
 			@Override
@@ -55,16 +55,17 @@ public class RecorderManager {
 		};
 	}
 
-	public void setRecorder(RecorderInterface.Recorder recorder){
+	public void setRecorder(RecorderInterface.Recorder recorder) {
 		audioRecorder = recorder;
 		audioRecorder.setStateListener(stateListener);
 	}
 
 	public void startRecording() {
 		if (!audioRecorder.isRecording()) {
-			audioRecorder.prepare(FileRepositoryImpl.getInstance(null, null).getRecordFileName(), prefs.getChannelCount(), prefs.getSampleRate(),
-					prefs.getBitrate());
-		} else if(!audioRecorder.isPaused()){
+			audioRecorder.prepare(FileRepositoryImpl.getInstance(null, null).getRecordFileName(),
+					prefs.getSettingChannelCount(), prefs.getSettingSampleRate(),
+					prefs.getSettingBitrate());
+		} else if (!audioRecorder.isPaused()) {
 			audioRecorder.pauseRecording();
 		} else {
 			audioRecorder.startRecording();

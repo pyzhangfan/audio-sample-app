@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<style name="Widget" parent="@android:style/Widget" />
+
+	<style name="Widget.RaisedButton" parent="@android:style/Widget.Material.Button">
+		<item name="android:textStyle">bold</item>
+		<item name="android:textColor">#414141</item>
+		<item name="android:background">@drawable/raised_button_background</item>
+		<item name="android:fontFamily">sans-serif</item>
+		<item name="android:letterSpacing">0.025</item>
+		<item name="android:textAllCaps">false</item>
+		<item name="android:textSize">@dimen/text_xmedium</item>
+		<item name="android:paddingStart">@dimen/spacing_double</item>
+		<item name="android:paddingEnd">@dimen/spacing_double</item>
+		<item name="android:paddingTop">@dimen/spacing_medium</item>
+		<item name="android:paddingBottom">@dimen/spacing_medium</item>
+	</style>
+
+	<style name="Widget.BorderlessButton" parent="@android:style/Widget.Material.Button.Borderless">
+		<item name="android:textStyle">bold</item>
+		<item name="android:textColor">#414141</item>
+		<item name="android:letterSpacing">0.025</item>
+		<item name="android:textAllCaps">false</item>
+		<item name="android:paddingStart">24dp</item>
+		<item name="android:paddingEnd">24dp</item>
+		<item name="android:paddingTop">@dimen/spacing_normal</item>
+		<item name="android:paddingBottom">@dimen/spacing_normal</item>
+		<item name="android:background">?android:selectableItemBackgroundBorderless</item>
+	</style>
+
+	<style name="TextAppearance.DialogTitle" parent="@android:style/TextAppearance.Material.Title">
+		<item name="android:textSize">22sp</item>
+		<item name="android:gravity">start</item>
+	</style>
+
+	<style name="TextAppearance.DialogContent" parent="@android:style/TextAppearance.Material.Body1">
+		<item name="android:textSize">16sp</item>
+		<item name="android:textColor">?android:textColorSecondary</item>
+		<item name="android:gravity">start</item>
+	</style>
+
+	<style name="Text">
+		<item name="android:textColor">@color/text_primary_light</item>
+		<item name="android:fontFamily">sans-serif-light</item>
+	</style>
+
+	<style name="Text.NormalLabel" parent="Text">
+		<item name="android:textSize">@dimen/text_large</item>
+	</style>
+
+	<style name="Text.SectionLabel">
+		<item name="android:textColor">@color/text_primary_light</item>
+		<item name="android:fontFamily">sans-serif-light</item>
+		<item name="android:textSize">@dimen/text_xlarge</item>
+	</style>
+</resources>

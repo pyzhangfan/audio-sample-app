@@ -1,7 +1,6 @@
 package com.pyz.audiosample.ui;
 
-import androidx.lifecycle.ViewModelProvider;
-
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -88,6 +87,9 @@ public class RecordFragment extends Fragment implements View.OnClickListener {
 	@Override
 	public void onClick(View view) {
 		switch (view.getId()){
+			case R.id.btn_settings:
+				startActivity(new Intent(getActivity(), SettingsActivity.class));
+				break;
 			case R.id.btn_record:
 				recordViewModel.record();
 				break;

@@ -11,4 +11,80 @@
 	<string name="delete">Delete</string>
 	<string name="recording">Recording: %s</string>
 
+	<string name="recording_format">Recording format:</string>
+	<string name="bitrate">Bitrate:</string>
+	<string name="channels">Channel count:</string>
+	<string name="sample_rate">Sample rate:</string>
+	<string name="size_per_min">%s Mb/min expected size</string>
+	<string name="value_hz">%d Hz</string>
+	<string name="value_kbps">%d kbps</string>
+	<string name="stereo">Stereo</string>
+	<string name="mono">Mono</string>
+	<string name="records_location">Records location:\n%s</string>
+	<string name="size">%s Mb</string>
+	<string name="info">Information</string>
+	<string name="btn_save">Save</string>
+	<string name="btn_cancel">Cancel</string>
+	<string name="btn_yes">Yes</string>
+	<string name="btn_ok">Ok</string>
+	<string name="btn_no">No</string>
+	<string name="btn_play">Play</string>
+	<string name="btn_deny">Deny</string>
+	<string name="btn_allow">Allow</string>
+	<string name="btn_details">Details</string>
+	<string name="btn_get_started">Get started</string>
+	<string name="btn_apply">Apply</string>
+	<string name="btn_reset">Reset</string>
+	<string name="btn_next">Next</string>
+	<string name="info_format"><b>M4a</b> format is encoded with AAC audio codec has good quality and small size. <b>(recommended)</b>
+		\n<b>Wav</b> is uncompressed audio data format. It takes much more space than other formats. It\'s needed for specific cases.
+		\n<b>3gp</b> is a multimedia container format developed for mobile telecommunication services. Use it if you need to save space.
+		</string>
+	<string name="info_frequency"><b>Sample rate</b> is the number of samples of audio carried per second.
+		\n<b>48kHz</b> is the sample rate used for DVDs.
+		\n<b>44,1kHz</b> is the sampling rate of Audio CDs. <b>(recommended)</b>
+		\n<b>22kHz</b> popular sample rate for low bit rate such as 64 kbps.
+		\n <b>8kHz</b> sample rate has less bandwidth than modern telephone systems. Not suitable for any serious recording task.
+		</string>
+	<string name="info_bitrate"><b>Bitrate</b> is size of data per second of sound. Directly affects recording quality and size.
+		\n<b>256 kbps</b> good quality bitrate.
+		\n<b>192 kbps</b> medium quality bitrate.
+		\n<b>128 kbps</b> mid-range bitrate quality. Common bitrate for podcasts. <b>(recommended)</b>
+		\n<b>96 kbps</b> generally used for speech or low-quality streaming.
+		\n<b>48 kbps</b> generally acceptable only for speech.
+		</string>
+	<string name="info_channels">
+		<b>Stereo</b> two separate channels are recorded. This means that each stereo speaker has a different sound signal. <b>(recommended)</b>
+		\n<b>Mono</b> one signal channel is recorded. It can be reproduced through several speakers, but all speakers are still reproducing the same copy of the signal.
+		</string>
+
+	<string-array name="formats2">
+<!--		<item>M4a</item>-->
+		<item>Wav</item>
+<!--		<item>3gp</item>-->
+	</string-array>
+
+	<string-array name="bit_rates2">
+		<!--		<item>24 kbps</item>-->
+		<item>48 kbps</item>
+		<item>96 kbps</item>
+		<item>128 kbps</item>
+		<item>192 kbps</item>
+		<item>256 kbps</item>
+	</string-array>
+
+	<string-array name="sample_rates2">
+		<item>8kHz</item>
+		<item>16kHz</item>
+		<item>22kHz</item>
+		<item>32kHz</item>
+		<item>44.1kHz</item>
+		<item>48kHz</item>
+	</string-array>
+
+	<string-array name="channels">
+		<item>Stereo</item>
+		<item>Mono</item>
+	</string-array>
+
 </resources>

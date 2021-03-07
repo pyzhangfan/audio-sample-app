@@ -7,10 +7,11 @@ import com.pyz.audiosample.AppConstants;
 public class PrefsImpl {
 
 	private static final String PREF_NAME = "record_pref";
-	private static final String KEY_FORMAT = "format";
-	private static final String KEY_BITRATE = "bitrate";
-	private static final String KEY_SAMPLE_RATE = "sample_rate";
-	private static final String KEY_CHANNEL_COUNT = "channel_count";
+
+	private static final String PREF_KEY_SETTING_RECORDING_FORMAT = "setting_recording_format";
+	private static final String PREF_KEY_SETTING_BITRATE = "setting_bitrate";
+	private static final String PREF_KEY_SETTING_SAMPLE_RATE = "setting_sample_rate";
+	private static final String PREF_KEY_SETTING_CHANNEL_COUNT = "setting_channel_count";
 
 	private SharedPreferences sharedPreferences;
 
@@ -31,19 +32,43 @@ public class PrefsImpl {
 		return instance;
 	}
 
-	public int getFormat() {
-		return sharedPreferences.getInt(KEY_FORMAT, AppConstants.RECORDING_FORMAT_M4A);
+	public void setSettingFormat(String formatKey) {
+		SharedPreferences.Editor editor = sharedPreferences.edit();
+		editor.putString(PREF_KEY_SETTING_RECORDING_FORMAT, formatKey);
+		editor.apply();
 	}
 
-	public int getBitrate() {
-		return sharedPreferences.getInt(KEY_BITRATE, AppConstants.RECORD_ENCODING_BITRATE_128000);
+	public String getSettingFormat() {
+		return sharedPreferences.getString(PREF_KEY_SETTING_RECORDING_FORMAT, AppConstants.DEFAULT_RECORDING_FORMAT);
 	}
 
-	public int getSampleRate() {
-		return sharedPreferences.getInt(KEY_SAMPLE_RATE, AppConstants.RECORD_SAMPLE_RATE_44100);
+	public void setSettingSampleRate(int sampleRate) {
+		SharedPreferences.Editor editor = sharedPreferences.edit();
+		editor.putInt(PREF_KEY_SETTING_SAMPLE_RATE, sampleRate);
+		editor.apply();
 	}
 
-	public int getChannelCount() {
-		return sharedPreferences.getInt(KEY_CHANNEL_COUNT, AppConstants.DEFAULT_CHANNEL_COUNT);
+	public int getSettingSampleRate() {
+		return sharedPreferences.getInt(PREF_KEY_SETTING_SAMPLE_RATE, AppConstants.RECORD_SAMPLE_RATE_44100);
+	}
+
+	public void setSettingBitrate(int rate) {
+		SharedPreferences.Editor editor = sharedPreferences.edit();
+		editor.putInt(PREF_KEY_SETTING_BITRATE, rate);
+		editor.apply();
+	}
+
+	public int getSettingBitrate() {
+		return sharedPreferences.getInt(PREF_KEY_SETTING_BITRATE, AppConstants.DEFAULT_RECORD_ENCODING_BITRATE);
+	}
+
+	public void setSettingChannelCount(int count) {
+		SharedPreferences.Editor editor = sharedPreferences.edit();
+		editor.putInt(PREF_KEY_SETTING_CHANNEL_COUNT, count);
+		editor.apply();
+	}
+
+	public int getSettingChannelCount() {
+		return sharedPreferences.getInt(PREF_KEY_SETTING_CHANNEL_COUNT, AppConstants.DEFAULT_CHANNEL_COUNT);
 	}
 }

@@ -35,7 +35,6 @@
 			android:layout_marginStart="@dimen/spacing_xxdouble"
 			android:layout_marginEnd="@dimen/spacing_xxdouble"
 			android:layout_marginBottom="@dimen/spacing_tiny"
-			android:drawableEnd="@drawable/ic_pencil_small"
 			android:ellipsize="end"
 			android:maxLines="2"
 			android:textSize="22sp"
@@ -93,7 +92,7 @@
 					android:padding="@dimen/spacing_normal"
 					android:layout_gravity="center"
 					android:scaleType="center"
-					android:visibility="visible"
+					android:visibility="invisible"
 					android:src="@drawable/ic_delete_forever_36"/>
 
 				<ImageButton

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.pyz.audiosample.data.DateRecordState;
+import com.pyz.audiosample.data.PrefsImpl;
 import com.pyz.audiosample.record.RecorderFactory;
 import com.pyz.audiosample.record.RecorderManager;
 
@@ -15,7 +16,7 @@ public class RecordViewModel extends ViewModel {
 	public void init() {
 		dateRecordState = DateRecordState.getInstance();
 		recorderManager = RecorderManager.getInstance();
-		recorderManager.setRecorder(RecorderFactory.getRecorder("wav"));
+		recorderManager.setRecorder(RecorderFactory.getRecorder(PrefsImpl.getInstance(null).getSettingFormat()));
 	}
 
 	public LiveData<Integer> getRecording() {

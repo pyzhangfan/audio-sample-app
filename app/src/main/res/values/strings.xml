@@ -61,6 +61,7 @@
 	<string-array name="formats2">
 <!--		<item>M4a</item>-->
 		<item>Wav</item>
+		<item>AAC</item>
 <!--		<item>3gp</item>-->
 	</string-array>
 

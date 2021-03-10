@@ -30,7 +30,7 @@ public class FileRepositoryImpl {
 		return instance;
 	}
 
-	public String getRecordFileName(){
-		return recordDirectory.getAbsolutePath() + File.separator + "Audio-1.wav";
+	public String getRecordFileName(String format){
+		return recordDirectory.getAbsolutePath() + File.separator + "Audio-1." + format;
 	}
 }

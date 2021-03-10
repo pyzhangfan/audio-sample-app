@@ -48,7 +48,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 		formats = getResources().getStringArray(R.array.formats2);
 		formatsKeys = new String[]{
 //				AppConstants.FORMAT_M4A,
-				AppConstants.FORMAT_WAV
+				AppConstants.FORMAT_WAV,
+				AppConstants.FORMAT_AAC
 //				AppConstants.FORMAT_3GP
 		};
 		formatSetting.setData(formats, formatsKeys);
@@ -144,8 +145,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 		bitrateSetting.setSelected(settingModel.getSettingBitrate());
 		channelsSetting.setSelected(settingModel.getSettingChannelCount());
 
-		settingModel.getHideBitrate().observe(this, hide ->{
-			Log.i(TAG, "hide:" +hide);
+		settingModel.getHideBitrate().observe(this, hide -> {
+			Log.i(TAG, "hide:" + hide);
 			bitrateSetting.setVisibility(hide ? View.GONE : View.VISIBLE);
 		});
 	}

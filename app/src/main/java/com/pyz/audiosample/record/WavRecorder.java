@@ -94,14 +94,14 @@ public class WavRecorder implements RecorderInterface.Recorder {
 							.build())
 					.setBufferSizeInBytes(minSize)
 					.build();
-			Log.i(TAG, "minBufferSize:" +minBufferSize + ",minSize:" + minSize);
+			Log.i(TAG, "minBufferSize:" + minBufferSize + ",minSize:" + minSize);
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 			if (mRecord != null) {
 				mRecord.release();
 				mRecord = null;
 			}
-			if(mTrack != null){
+			if (mTrack != null) {
 				mTrack.release();
 				mTrack = null;
 			}
@@ -124,7 +124,7 @@ public class WavRecorder implements RecorderInterface.Recorder {
 			try {
 				mRecord.startRecording();
 				isRecording = true;
-				if(mTrack != null){
+				if (mTrack != null) {
 					mTrack.play();
 				}
 				if (!isPaused && recordingThread == null) {
@@ -156,14 +156,14 @@ public class WavRecorder implements RecorderInterface.Recorder {
 			try {
 				pauseRecordingTimer();
 				mRecord.stop();
-				if(mTrack != null){
+				if (mTrack != null) {
 					mTrack.pause();
 				}
 				isPaused = true;
 				if (stateListener != null) {
 					stateListener.onPauseRecord();
 				}
-			}catch (IllegalStateException e){
+			} catch (IllegalStateException e) {
 				e.printStackTrace();
 			}
 		}
@@ -190,7 +190,7 @@ public class WavRecorder implements RecorderInterface.Recorder {
 				stateListener.onStopRecord(null);
 			}
 		}
-		if(mTrack != null){
+		if (mTrack != null) {
 			mTrack.stop();
 			mTrack.release();
 			mTrack = null;
@@ -229,7 +229,7 @@ public class WavRecorder implements RecorderInterface.Recorder {
 						readSize = mRecord.read(data, 0, minBufferSize);
 						Log.i(TAG, "readSize:" + readSize);
 						if (readSize != AudioRecord.ERROR_INVALID_OPERATION) {
-							if(mPlayHandler != null){
+							if (mPlayHandler != null) {
 								Message msg = Message.obtain();
 								msg.what = MSG_DATA;
 								msg.obj = data;
@@ -242,7 +242,7 @@ public class WavRecorder implements RecorderInterface.Recorder {
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
-			}finally {
+			} finally {
 				try {
 					out.close();
 				} catch (IOException e) {
@@ -265,7 +265,8 @@ public class WavRecorder implements RecorderInterface.Recorder {
 		try {
 			final RandomAccessFile wavFile = randomAccessFile(file);
 			wavFile.seek(0); // to the beginning
-			wavFile.write(generateHeader(totalAudioLen, totalSize, sampleRate, channels, byteRate));
+			wavFile.write(generateHeader(totalAudioLen, totalSize, sampleRate, channels,
+					byteRate));
 			wavFile.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -366,22 +367,22 @@ public class WavRecorder implements RecorderInterface.Recorder {
 		//获取HandlerThread线程中的Looper实例
 		Looper loop = mPlayThread.getLooper();
 		//创建Handler与该线程绑定。
-		mPlayHandler = new Handler(loop){
+		mPlayHandler = new Handler(loop) {
 			public void handleMessage(Message msg) {
-				switch(msg.what){
+				switch (msg.what) {
 					case MSG_DATA:
 						byte[] data = (byte[]) msg.obj;
 						int size = msg.arg1;
-						if(mTrack != null && mTrack.getPlayState() == AudioTrack.PLAYSTATE_PLAYING){
-							Log.i(TAG, "write size:" +size);
-							if(size > 0)
+						if (mTrack != null && mTrack.getPlayState() == AudioTrack.PLAYSTATE_PLAYING) {
+							Log.i(TAG, "write size:" + size);
+							if (size > 0)
 								mTrack.write(data, 0, size);
 						}
 						break;
 					default:
 						break;
 				}
-			};
+			}
 		};
 	}
 

@@ -16,7 +16,6 @@ public class RecordViewModel extends ViewModel {
 	public void init() {
 		dateRecordState = DateRecordState.getInstance();
 		recorderManager = RecorderManager.getInstance();
-		recorderManager.setRecorder(RecorderFactory.getRecorder(PrefsImpl.getInstance(null).getSettingFormat()));
 	}
 
 	public LiveData<Integer> getRecording() {
@@ -27,11 +26,11 @@ public class RecordViewModel extends ViewModel {
 		return dateRecordState.getRecordingDuration();
 	}
 
-	public void record(){
+	public void record() {
 		recorderManager.startRecording();
 	}
 
-	public void stopRecord(){
+	public void stopRecord() {
 		recorderManager.stopRecording();
 	}
 

@@ -266,11 +266,10 @@ public class AacRecorder implements RecorderInterface.Recorder {
 
 						if (audioData != null) {
 							ByteBuffer inputBuffer = mCodec.getInputBuffer(inputBufferId);
-							Log.i(TAG, "put len:" + audioData.readSize);
+//							Log.i(TAG, "put len:" + audioData.readSize);
 							byte[] data = audioData.data;
-							totalSize += audioData.readSize;
+//							totalSize += audioData.readSize;
 							inputBuffer.put(data, 0, audioData.readSize);
-//								Log.i(TAG, "put len:" + data.length);
 							mCodec.queueInputBuffer(inputBufferId, 0, audioData.readSize, 0,
 									0);
 							mBufferPool.deque(audioData);
@@ -288,9 +287,9 @@ public class AacRecorder implements RecorderInterface.Recorder {
 						ByteBuffer outputBuffer = mCodec.getOutputBuffer(outputBufferId);
 //							MediaFormat bufferFormat = mCodec.getOutputFormat(outputBufferId);
 						// option A
-						Log.i(TAG,
-								"bufferInfo offset:" + bufferInfo.offset + ",size:" + bufferInfo.size
-										+ ",presentationTimeUs:" + bufferInfo.presentationTimeUs + ",flags:" + bufferInfo.flags);
+//						Log.i(TAG,
+//								"bufferInfo offset:" + bufferInfo.offset + ",size:" + bufferInfo.size
+//										+ ",presentationTimeUs:" + bufferInfo.presentationTimeUs + ",flags:" + bufferInfo.flags);
 						if (bufferInfo.flags == MediaCodec.BUFFER_FLAG_END_OF_STREAM) {
 							Log.i(TAG, "BUFFER_FLAG_END_OF_STREAM");
 							isEncodeEnd = true;
@@ -301,6 +300,7 @@ public class AacRecorder implements RecorderInterface.Recorder {
 								//设置header
 								AacUtil.setADTSPacketLen(channelCount, aacHeader,
 										len + AAC_HEADER_SIZE);
+								totalSize += len;
 								out.write(aacHeader);
 								out.write(aacData, 0, len);
 							}

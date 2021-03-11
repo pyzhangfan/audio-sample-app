@@ -61,8 +61,10 @@ public class RecorderManager {
 	}
 
 	public void startRecording() {
-		if (!audioRecorder.isRecording()) {
+		if(audioRecorder == null){
 			setRecorder(RecorderFactory.getRecorder(PrefsImpl.getInstance(null).getSettingFormat()));
+		}
+		if (!audioRecorder.isRecording()) {
 			audioRecorder.prepare(FileRepositoryImpl.getInstance(null, null).getRecordFileName(prefs.getSettingFormat()),
 					prefs.getSettingChannelCount(), prefs.getSettingSampleRate(),
 					prefs.getSettingBitrate());

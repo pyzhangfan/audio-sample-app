@@ -5,10 +5,6 @@ import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.AudioTrack;
 import android.media.MediaRecorder;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.Looper;
-import android.os.Message;
 import android.util.Log;
 
 import java.io.File;
@@ -18,6 +14,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 public class WavRecorder implements RecorderInterface.Recorder {
 
@@ -25,10 +22,13 @@ public class WavRecorder implements RecorderInterface.Recorder {
 	private final static int WAR_HEADER_LENGTH = 44;
 	private final static int RECORDER_BPP = 16; //bits per sample
 	private final static int SEC_INTERNAL = 1000;
+	private final static int BUFFER_COUNT = 5;
+	private final static int TIME_OUT = 20;
+
 	private AudioRecord mRecord;
 	private RecorderInterface.StateListener stateListener;
 
-	private int minBufferSize = 0;
+	private int bufferSize = 0;
 	private int sampleRate = 44100;
 	private int channelCount = 1;
 	private boolean isRecording;
@@ -41,9 +41,8 @@ public class WavRecorder implements RecorderInterface.Recorder {
 	private long progress = 0;
 
 	private AudioTrack mTrack;
-	private HandlerThread mPlayThread;
-	private Handler mPlayHandler;
-	private final static int MSG_DATA = 1;
+	private BufferPool mBufferPool;
+	private Thread mPlayThread;
 
 	private static class WavRecorderSingletonHolder {
 		private static WavRecorder singleton = new WavRecorder();
@@ -73,10 +72,10 @@ public class WavRecorder implements RecorderInterface.Recorder {
 			audioFile = new File(outputFile);
 			int channelConfig = channelCount == 1 ? AudioFormat.CHANNEL_IN_MONO :
 					AudioFormat.CHANNEL_IN_STEREO;
-			minBufferSize = AudioRecord.getMinBufferSize(sampleRate, channelConfig,
+			bufferSize = AudioRecord.getMinBufferSize(sampleRate, channelConfig,
 					AudioFormat.ENCODING_PCM_16BIT);
 			mRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, sampleRate, channelConfig,
-					AudioFormat.ENCODING_PCM_16BIT, minBufferSize);
+					AudioFormat.ENCODING_PCM_16BIT, bufferSize);
 
 			int outChannelConfig = channelCount == 1 ? AudioFormat.CHANNEL_OUT_MONO :
 					AudioFormat.CHANNEL_OUT_STEREO;
@@ -94,7 +93,8 @@ public class WavRecorder implements RecorderInterface.Recorder {
 							.build())
 					.setBufferSizeInBytes(minSize)
 					.build();
-			Log.i(TAG, "minBufferSize:" + minBufferSize + ",minSize:" + minSize);
+			mBufferPool = new BufferPool(BUFFER_COUNT, bufferSize);
+			Log.i(TAG, "minBufferSize:" + bufferSize + ",minSize:" + minSize);
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 			if (mRecord != null) {
@@ -135,7 +135,13 @@ public class WavRecorder implements RecorderInterface.Recorder {
 						}
 					});
 					recordingThread.start();
-					startHandlerThraed();
+					startPlayThraed();
+				} else if (isPaused) {
+					synchronized (mPlayThread) {
+						isPaused = false;
+						mPlayThread.notify();
+						Log.i(TAG, "notify");
+					}
 				}
 				isPaused = false;
 				startRecordingTimer();
@@ -184,18 +190,14 @@ public class WavRecorder implements RecorderInterface.Recorder {
 			} finally {
 				mRecord.release();
 				mRecord = null;
+				synchronized (mPlayThread) {
+					mPlayThread.notify();
+				}
 			}
-
+			mPlayThread = null;
 			if (stateListener != null) {
 				stateListener.onStopRecord(null);
 			}
-		}
-		if (mTrack != null) {
-			mTrack.stop();
-			mTrack.release();
-			mTrack = null;
-			mPlayThread.quit();
-			mPlayThread = null;
 		}
 	}
 
@@ -222,25 +224,29 @@ public class WavRecorder implements RecorderInterface.Recorder {
 				//先写入wav文件头44字节，最后修改这44字节数据
 				byte[] header = new byte[WAR_HEADER_LENGTH];
 				out.write(header);
-				byte[] data = new byte[minBufferSize];
 				int readSize = 0;
 				while (isRecording) {
-					if (!isPaused) {
-						readSize = mRecord.read(data, 0, minBufferSize);
-						Log.i(TAG, "readSize:" + readSize);
-						if (readSize != AudioRecord.ERROR_INVALID_OPERATION) {
-							if (mPlayHandler != null) {
-								Message msg = Message.obtain();
-								msg.what = MSG_DATA;
-								msg.obj = data;
-								msg.arg1 = readSize;
-								mPlayHandler.sendMessage(msg);
-							}
-							out.write(data, 0, readSize);
+					if (isPaused) {
+						synchronized (mPlayThread) {
+							mPlayThread.wait();
+							Log.i(TAG, "wait end");
 						}
+						continue;
+					}
+					BufferPool.AudioData audioData = mBufferPool.takeFreeBuffer();
+					if (audioData != null) {
+						readSize = mRecord.read(audioData.data, 0, bufferSize);
+						Log.i(TAG, "readSize:" + readSize);
+						if (readSize <= 0) {
+							audioData.readSize = 0;
+						} else {
+							audioData.readSize = readSize;
+							out.write(audioData.data, 0, readSize);
+						}
+						mBufferPool.enque(audioData);
 					}
 				}
-			} catch (IOException e) {
+			} catch (IOException | InterruptedException e) {
 				e.printStackTrace();
 			} finally {
 				try {
@@ -359,31 +365,49 @@ public class WavRecorder implements RecorderInterface.Recorder {
 		timerProgress.purge();
 	}
 
-	private void startHandlerThraed() {
+	private void startPlayThraed() {
 		//创建HandlerThread实例
-		mPlayThread = new HandlerThread("play_thread");
+		mPlayThread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				playAudioData();
+			}
+		});
 		//开始运行线程
 		mPlayThread.start();
-		//获取HandlerThread线程中的Looper实例
-		Looper loop = mPlayThread.getLooper();
-		//创建Handler与该线程绑定。
-		mPlayHandler = new Handler(loop) {
-			public void handleMessage(Message msg) {
-				switch (msg.what) {
-					case MSG_DATA:
-						byte[] data = (byte[]) msg.obj;
-						int size = msg.arg1;
-						if (mTrack != null && mTrack.getPlayState() == AudioTrack.PLAYSTATE_PLAYING) {
+	}
+
+	private void playAudioData() {
+		Log.i(TAG, "playAudioData start");
+		try {
+			while (isRecording) {
+				BufferPool.AudioData audioData = mBufferPool.pollDataBuffer(TIME_OUT,
+						TimeUnit.MILLISECONDS);
+				if (audioData != null) {
+					int size = audioData.readSize;
+					if (mTrack != null && mTrack.getState() == AudioTrack.STATE_INITIALIZED) {
+						if (size > 0) {
 							Log.i(TAG, "write size:" + size);
-							if (size > 0)
-								mTrack.write(data, 0, size);
+							mTrack.write(audioData.data, 0, size);
 						}
-						break;
-					default:
-						break;
+					}
+					mBufferPool.deque(audioData);
 				}
 			}
-		};
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} finally {
+			if (mTrack != null) {
+				mTrack.stop();
+				mTrack.release();
+				mTrack = null;
+			}
+			if (mBufferPool == null) {
+				mBufferPool.clear();
+				mBufferPool = null;
+			}
+		}
+		Log.i(TAG, "playAudioData end ");
 	}
 
 }

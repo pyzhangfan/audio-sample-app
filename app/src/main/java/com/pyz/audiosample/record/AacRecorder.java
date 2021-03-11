@@ -26,7 +26,7 @@ public class AacRecorder implements RecorderInterface.Recorder {
 	private final static String AAC_TYPE = MediaFormat.MIMETYPE_AUDIO_AAC;
 	private final static int AAC_HEADER_SIZE = 7;
 	private final static int TIME_OUT = 20;
-	private final static int BUFFER_COUNT = 10;
+	private final static int BUFFER_COUNT = 5;
 
 	private final static int SEC_INTERNAL = 1000;
 	private AudioRecord mRecord;
@@ -288,8 +288,10 @@ public class AacRecorder implements RecorderInterface.Recorder {
 //							MediaFormat bufferFormat = mCodec.getOutputFormat(outputBufferId);
 						// option A
 //						Log.i(TAG,
-//								"bufferInfo offset:" + bufferInfo.offset + ",size:" + bufferInfo.size
-//										+ ",presentationTimeUs:" + bufferInfo.presentationTimeUs + ",flags:" + bufferInfo.flags);
+//								"bufferInfo offset:" + bufferInfo.offset + ",size:" + bufferInfo
+//								.size
+//										+ ",presentationTimeUs:" + bufferInfo.presentationTimeUs +
+//										",flags:" + bufferInfo.flags);
 						if (bufferInfo.flags == MediaCodec.BUFFER_FLAG_END_OF_STREAM) {
 							Log.i(TAG, "BUFFER_FLAG_END_OF_STREAM");
 							isEncodeEnd = true;
